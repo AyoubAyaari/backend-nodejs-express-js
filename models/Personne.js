@@ -1,5 +1,5 @@
 const db =require('../config/db');
-const { deletepersonne } = require('../controllers/PersonneController');
+
 class PersonneModel{
 
 
@@ -23,7 +23,7 @@ class PersonneModel{
             return new Promise((resolve) => {
                 db.query(
                     "INSERT INTO personne (nom, prenom, email, cin, datecreation, montant, score) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    [nom, prenom, email, cin, datecreation, montant, score],
+                    [nom, prenom, email, cin, datecreation, montant, 50],
                     (error, result) => {
                         if (!error) {
                             resolve(true);

@@ -13,7 +13,7 @@ db.getConnection((error, connection) => {
     if (error) {
         console.error('Error connecting to the database:', error.message);
     } else {
-        console.log('Connected to the database');
+        console.log("connected to the database");
           // Release the connection when done with it
     }
 });
