@@ -15,6 +15,7 @@ router.get("/",(req,res,next)=>{
 router.get("/allpersonne",personnecontroller.getallpersonnes)
 router.get("/allproduit",produitcontroller.getallproduits)
 router.get("/prodbyid/:id",produitcontroller.getaproduit)
+router.get("/prodper/:idpersonne",produitcontroller.getproduitper)
 router.get("/alltransactions",transactioncontroller.getalltransactions)
 router.get("/allenchere",encherecontroller.getallencheres)
 router.post("/addpersonne",personnecontroller.addnewpersonne)

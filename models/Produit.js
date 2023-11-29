@@ -36,6 +36,24 @@ class Produit{
           });
         });
       }
+      static async getproduibyidpersonne(idpersonne){
+      
+        return new Promise((resolve) => {
+          let query = "SELECT * FROM produit where idpersonne =?";
+          
+          // If an id is provided, add a WHERE clause to filter by id
+         
+      
+          db.query(query, [idpersonne], (error, result) => {
+            if (error) {
+              console.error("Error executing SQL query:", error);
+              resolve([]);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      }
       
     static async addproduit(nom, description, prix, min, max, email) {
         try {
