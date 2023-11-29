@@ -1,5 +1,6 @@
 const db =require('../config/db')
 const fs = require('fs');
+const path = require('path');
 class Produit{
 
 
@@ -21,23 +22,27 @@ class Produit{
     }
     
 
-    static async addproduit(nom, description, prix, imgPath, datelimite, min, max) {
+    static async addproduit(email, nom, description, prix, imgPath, datelimite, min, max) {
         try {
             // Read the image file as a buffer
             const imgBuffer = await fs.readFile(imgPath);
     
             // Define the path to save the image in the "assets" folder
             const imageName = `${Date.now()}_${path.basename(imgPath)}`;
-            const imagePath = path.join(__dirname, '../assets', imageName);
+            const imagePath = path.join(__dirname, './assets', imageName);
     
             // Save the image to the "assets" folder
             await fs.writeFile(imagePath, imgBuffer);
     
+            // Get the idpersonne using the provided email
+            const checkEmailResult = await db.query("SELECT id FROM personne WHERE email = ?", [email]);
+            const idpersonne = checkEmailResult[0].id;
+    
             // Insert data into the database
-            return new Promise((resolve) => {
+            return new Promise(async (resolve) => {
                 db.query(
-                    "INSERT INTO produit (nom, description, prix, img, datelimite, min, max) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    [nom, description, prix, imageName, datelimite, min, max],
+                    "INSERT INTO produit (nom, description, prix, img, datelimite, min, max, idpersonne) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    [nom, description, prix, imageName, datelimite, min, max, idpersonne],
                     (error, result) => {
                         if (!error) {
                             resolve(true);

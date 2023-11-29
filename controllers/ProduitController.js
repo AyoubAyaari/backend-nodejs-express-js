@@ -14,12 +14,12 @@ class ProduitController{
 
     static async addnewproduit(req, res) {
         try {
-            const { nom, description, prix, img, datelimite, min, max } = req.body;
+            const { email,nom, description, prix, img, datelimite, min, max } = req.body;
     
             // Assuming img is the base64-encoded image data received in the request body
             const imgBuffer = Buffer.from(img, 'base64');
     
-            const success = await produitModel.addproduit(nom, description, prix, imgBuffer, datelimite, min, max);
+            const success = await produitModel.addproduit(email, nom, description, prix, img, datelimite, min, max);
     
             if (success) {
                 res.send("Added successfully");

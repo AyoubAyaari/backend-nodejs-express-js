@@ -84,7 +84,7 @@ else
         // Generate a token with a 24-hour expiration
         const token = jwt.sign({ email }, 'your_secret_key', { expiresIn: '24h' });
 
-        res.json({ success: true, token });
+        res.json({ success: true, token,email });
     } catch (error) {
         console.error("Error in signInAndGenerateToken route:", error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
