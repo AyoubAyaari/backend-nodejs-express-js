@@ -1,4 +1,5 @@
 const db =require('../config/db')
+const fs = require('fs');
 class Produit{
 
 
@@ -18,27 +19,41 @@ class Produit{
         });
 
     }
-    static async addproduit(nom, description, prix, img, datelimite, min, max) {
+    
+
+    static async addproduit(nom, description, prix, imgPath, datelimite, min, max) {
         try {
+            // Read the image file as a buffer
+            const imgBuffer = await fs.readFile(imgPath);
+    
+            // Define the path to save the image in the "assets" folder
+            const imageName = `${Date.now()}_${path.basename(imgPath)}`;
+            const imagePath = path.join(__dirname, '../assets', imageName);
+    
+            // Save the image to the "assets" folder
+            await fs.writeFile(imagePath, imgBuffer);
+    
+            // Insert data into the database
             return new Promise((resolve) => {
                 db.query(
                     "INSERT INTO produit (nom, description, prix, img, datelimite, min, max) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    [nom, description, prix, img, datelimite, min, max],
+                    [nom, description, prix, imageName, datelimite, min, max],
                     (error, result) => {
                         if (!error) {
                             resolve(true);
                         } else {
-                            console.error("Error in addpersonne query:", error);
+                            console.error("Error in addproduit query:", error);
                             resolve(false);
                         }
                     }
                 );
             });
         } catch (error) {
-            console.error("Error in addpersonne:", error);
+            console.error("Error in addproduit:", error);
             return false;
-}
+        }
     }
+
       static async deleteproduit(id) {
         try {
             // Check if the record with the specified id exists
