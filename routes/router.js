@@ -27,4 +27,5 @@ router.put("/editpersonne",personnecontroller.updatepersonne)
 router.put("/editproduit",produitcontroller.updateproduit)
 router.put("/edittransaction",transactioncontroller.updatetransaction)
 router.put("/editenchere",encherecontroller.updateenchere)
+router.post("/signin",personnecontroller.signInAndGenerateToken)
 module.exports=router;

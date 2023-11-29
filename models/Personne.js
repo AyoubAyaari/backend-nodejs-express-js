@@ -6,10 +6,10 @@ class PersonneModel{
 
 
 
-    static async getpersonnes(email) {
+    static async getpersonnes() {
         return new Promise((resolve) => {
 
-            db.query("SELECT * FROM personne where email = ?", [email],(error, result) => {
+            db.query("SELECT * FROM personne ",(error, result) => {
                 if (error) {
                     console.error("Error executing SQL query:", error);
                     resolve([]);
@@ -64,20 +64,41 @@ class PersonneModel{
         })
         })
     }
-    static async getByEmail(email) {
-        try {
-            const query = 'SELECT * FROM personne WHERE email = ?';
-            const [personne] = await db.query(query, [email]);
-
-            // Return the first matching person or null if not found
-            return personne.length ? personne[0] : null;
-        } catch (error) {
-            console.error('Error in getByEmail method:', error);
-            throw error;
-        }
+    static async getPersonByEmail(email) {
+        return new Promise((resolve) => {
+            db.query('SELECT * FROM personne WHERE email = ?', [email], (error, result) => {
+                if (error) {
+                    console.error('Error executing SQL query:', error);
+                    resolve([]);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
     }
 
+    static async signInAndGenerateToken(email) {
+        try {
+            // Retrieve the user with the provided email
+            const user = await this.getPersonByEmail(email);
+
+            // Check if the user exists
+            if (user.length === 0) {
+                return { success: false, message: 'Invalid email.' };
+            }
+
+            // Generate a token with a 24-hour expiration
+            const token = jwt.sign({ email }, 'your_secret_key', { expiresIn: '24h' });
+
+            return { success: true, token };
+        } catch (error) {
+            console.error('Error in signInAndGenerateToken:', error);
+            return { success: false, message: 'An error occurred during sign-in.' };
+        }
+    }
+ 
 }
+
     
 
 module.exports=PersonneModel
