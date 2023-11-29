@@ -36,15 +36,12 @@ class Produit{
           });
         });
       }
-      static async getproduibyidpersonne(idpersonne){
-      
+      static async getproduibyemail(email) {
         return new Promise((resolve) => {
-          let query = "SELECT * FROM produit where idpersonne =?";
+          let query = "SELECT * FROM produit WHERE idpersonne = (SELECT id FROM personne WHERE email = ?)";
           
-          // If an id is provided, add a WHERE clause to filter by id
-         
-      
-          db.query(query, [idpersonne], (error, result) => {
+          // Execute the SQL query with the provided email
+          db.query(query, [email], (error, result) => {
             if (error) {
               console.error("Error executing SQL query:", error);
               resolve([]);
@@ -54,6 +51,7 @@ class Produit{
           });
         });
       }
+      
       
     static async addproduit(nom, description, prix, min, max, email) {
         try {

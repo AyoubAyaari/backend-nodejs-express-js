@@ -28,16 +28,16 @@ class ProduitController{
     }
     static async getproduitper(req, res) {
       try {
-        const idpersonne = req.params.idpersonne; // Assuming you're getting id from the URL parameter
-        const result = await produitModel.getproduibyidpersonne(idpersonne);
-    
+        const email = req.params.email; // Assuming you're getting email from the URL parameter
+        const result = await produitModel.getproduibyemail(email);
+        
         if (result.length > 0) {
           res.send(result);
         } else {
           res.send("No products found");
         }
       } catch (error) {
-        console.error("Error in getallproduits route:", error);
+        console.error("Error in getproduitper route:", error);
         res.status(500).send("Internal Server Error");
       }
     }
