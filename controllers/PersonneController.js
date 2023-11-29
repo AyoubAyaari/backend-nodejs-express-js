@@ -1,9 +1,14 @@
 const personneModel=require("../models/Personne")
 const {validationResult}=require("express-validator")
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 class PersonneController{
 
     static async getallpersonnes(req,res)
     {
+      
+      const {email} = req.body;
       var result = await personneModel.getpersonnes();
 
       if(result)
@@ -57,4 +62,12 @@ res.send("data updated successfully")
 else
  send ("erreur")
   }
+
+
+  static async generateResetToken (email)  {
+    const token = jwt.sign({email}, 'reset-secret-key', {
+        expiresIn: '24h', // Token expires in 1 hour
+    });
+    return token;
+};
 }module.exports=PersonneController

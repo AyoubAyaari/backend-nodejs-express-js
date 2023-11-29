@@ -6,9 +6,10 @@ class PersonneModel{
 
 
 
-    static async getpersonnes() {
+    static async getpersonnes(email) {
         return new Promise((resolve) => {
-            db.query("SELECT * FROM personne", (error, result) => {
+
+            db.query("SELECT * FROM personne where email = ?", [email],(error, result) => {
                 if (error) {
                     console.error("Error executing SQL query:", error);
                     resolve([]);
@@ -63,7 +64,18 @@ class PersonneModel{
         })
         })
     }
+    static async getByEmail(email) {
+        try {
+            const query = 'SELECT * FROM personne WHERE email = ?';
+            const [personne] = await db.query(query, [email]);
 
+            // Return the first matching person or null if not found
+            return personne.length ? personne[0] : null;
+        } catch (error) {
+            console.error('Error in getByEmail method:', error);
+            throw error;
+        }
+    }
 
 }
     
