@@ -5,6 +5,8 @@ const transactioncontroller = require ("../controllers/TransactionController")
 const encherecontroller = require ("../controllers/EnchereController")
 const router=require('express').Router();
 const {check}=require("express-validator");
+const multer = require('multer');
+const upload = multer();
 
 
 
@@ -16,7 +18,7 @@ router.get("/allproduit",produitcontroller.getallproduits)
 router.get("/alltransactions",transactioncontroller.getalltransactions)
 router.get("/allenchere",encherecontroller.getallencheres)
 router.post("/addpersonne",personnecontroller.addnewpersonne)
-router.post("/addproduit",produitcontroller.addnewproduit)
+router.post("/addproduit", produitcontroller.addnewproduit)
 router.post("/addtransaction",transactioncontroller.addnewtransaction)
 router.post("/addenchere",encherecontroller.addnewenchere)
 router.post("/signin",personnecontroller.signInAndGenerateToken)

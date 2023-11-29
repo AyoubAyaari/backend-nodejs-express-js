@@ -1,6 +1,5 @@
 const produitModel=require("../models/Produit")
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require('fs');
 class ProduitController{
 
     static async getallproduits(req,res)
@@ -11,26 +10,23 @@ class ProduitController{
       res.send(result)
     
     }
-
     static async addnewproduit(req, res) {
         try {
-            const { email,nom, description, prix, img, datelimite, min, max } = req.body;
-    
-            // Assuming img is the base64-encoded image data received in the request body
-            const imgBuffer = Buffer.from(img, 'base64');
-    
-            const success = await produitModel.addproduit(email, nom, description, prix, img, datelimite, min, max);
-    
-            if (success) {
-                res.send("Added successfully");
-            } else {
-                res.send("Failed to add");
-            }
+          const { nom, description, prix, min, max, email } = req.body;
+      
+          const success = await produitModel.addproduit(nom, description, prix, min, max, email);
+      
+          if (success) {
+            res.send("Add successfully");
+          } else {
+            res.send("Add failed");
+          }
         } catch (error) {
-            console.error("Error in addnewproduit route:", error);
-            res.status(500).send("Internal Server Error");
+          console.error("Error in addnewproduit route:", error);
+          res.status(500).send("Internal Server Error");
         }
-    }
+      }
+      
   static async deleteproduit (req,res){
     const id=req.body.id;
     if (id){
