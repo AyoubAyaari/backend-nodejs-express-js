@@ -1,4 +1,5 @@
 const enchereModel = require("../models/Enchere");
+const db =require('../config/db');
 
 class EnchereController {
   static async getallencheres(req, res) {
@@ -8,24 +9,20 @@ class EnchereController {
   }
   static async addnewenchere(req, res) {
     try {
-      const { idpersonne, idproduit, montant } = req.body;
-
-      const success = await enchereModel.addenchere(
-        idpersonne,
-        idproduit,
-        montant
-      );
-
+      const { email, idproduit,montant } = req.body;
+      
+      const success = await enchereModel.addenchere(email, idproduit,montant);
+  
       if (success) {
-        res.send("add successfully");
+        res.send("Add successfully");
       } else {
-        res.send("add failed");
+        res.send("Add failed");
       }
     } catch (error) {
-      console.error("Error in addnewpersonne route:", error);
+      console.error("Error in addnewenchere route:", error);
       res.status(500).send("Internal Server Error");
     }
-  }
+}
 
   static async deleteencheres(req, res) {
     const { idpersonne, idproduit } = req.body;
