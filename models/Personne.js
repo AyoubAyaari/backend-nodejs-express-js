@@ -19,12 +19,16 @@ class PersonneModel{
             });
         });
     }
-   static async addpersonne(nom, prenom, email, cin, datecreation, montant, score) {
+   static async addpersonne(nom, prenom, email, cin) {
         try {
+            const currentDate = new Date();
+            const formattedDate = `${currentDate.getFullYear()}-${(
+              currentDate.getMonth() + 1
+            ).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
             return new Promise((resolve) => {
                 db.query(
                     "INSERT INTO personne (nom, prenom, email, cin, datecreation, montant, score) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    [nom, prenom, email, cin, datecreation, montant, 50],
+                    [nom, prenom, email, cin, formattedDate,0, 50],
                     (error, result) => {
                         if (!error) {
                             resolve(true);
@@ -77,26 +81,7 @@ class PersonneModel{
         });
     }
 
-    static async signInAndGenerateToken(email) {
-        try {
-            // Retrieve the user with the provided email
-            const user = await this.getPersonByEmail(email);
-
-            // Check if the user exists
-            if (user.length === 0) {
-                return { success: false, message: 'Invalid email.' };
-            }
-
-            // Generate a token with a 24-hour expiration
-            const token = jwt.sign({ email }, 'your_secret_key', { expiresIn: '24h' });
-
-            return { success: true, token };
-        } catch (error) {
-            console.error('Error in signInAndGenerateToken:', error);
-            return { success: false, message: 'An error occurred during sign-in.' };
-        }
-    }
- 
+    
 }
 
     

@@ -17,9 +17,9 @@ class PersonneController{
     }
     static async addnewpersonne(req, res) {
       try {
-          const { nom, prenom, email, cin, datecreation, montant, score } = req.body;
+          const { nom, prenom, email, cin } = req.body;
   
-          const success = await personneModel.addpersonne(nom, prenom, email, cin, datecreation, montant, score);
+          const success = await personneModel.addpersonne(nom, prenom, email, cin);
   
           if (success) {
               res.send("add successfully");
