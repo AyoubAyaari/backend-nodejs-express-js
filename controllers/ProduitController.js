@@ -4,11 +4,27 @@ class ProduitController{
 
     static async getallproduits(req,res)
     {
+      
       var result = await produitModel.getproduits();
 
       if(result)
       res.send(result)
     
+    }
+    static async getaproduit(req, res) {
+      try {
+        const id = req.params.id; // Assuming you're getting id from the URL parameter
+        const result = await produitModel.getproduibyid(id);
+    
+        if (result.length > 0) {
+          res.send(result);
+        } else {
+          res.send("No products found");
+        }
+      } catch (error) {
+        console.error("Error in getallproduits route:", error);
+        res.status(500).send("Internal Server Error");
+      }
     }
     static async addnewproduit(req, res) {
         try {

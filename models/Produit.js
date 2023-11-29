@@ -18,6 +18,25 @@ class Produit{
         });
 
     }
+    static async getproduibyid(id){
+      
+        return new Promise((resolve) => {
+          let query = "SELECT * FROM produit where id =?";
+          
+          // If an id is provided, add a WHERE clause to filter by id
+         
+      
+          db.query(query, [id], (error, result) => {
+            if (error) {
+              console.error("Error executing SQL query:", error);
+              resolve([]);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      }
+      
     static async addproduit(nom, description, prix, min, max, email) {
         try {
           const idpersonne = await new Promise((resolve) => {
