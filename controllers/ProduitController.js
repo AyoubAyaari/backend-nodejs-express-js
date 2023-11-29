@@ -1,5 +1,6 @@
 const produitModel=require("../models/Produit")
-const fs = require('fs');
+const fs = require('fs').promises;
+const path = require('path');
 class ProduitController{
 
     static async getallproduits(req,res)
