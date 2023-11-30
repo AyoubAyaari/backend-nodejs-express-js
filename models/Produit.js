@@ -5,19 +5,39 @@ class Produit{
 
 
 
-    static async getproduits(){
-        return new Promise((resolve) => {
-            db.query("SELECT * FROM produit", (error, result) => {
-                if (error) {
-                    console.error("Error executing SQL query:", error);
-                    resolve([]);
+  static async getAndDeleteOldProduits() {
+    return new Promise((resolve) => {
+      // Get the date two days ago
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+  
+      db.query(
+        "SELECT * FROM produit WHERE datecreation >= ?",
+        [twoDaysAgo],
+        (error, newProduits) => {
+          if (error) {
+            console.error("Error executing SQL query for new products:", error);
+            resolve([]);
+          } else {
+            // Delete old products
+            db.query(
+              "DELETE FROM produit WHERE datecreation < ?",
+              [twoDaysAgo],
+              (deleteError, deletedOldProduits) => {
+                if (deleteError) {
+                  console.error("Error deleting old products:", deleteError);
+                  resolve([]);
                 } else {
-                    resolve(result);
+                  resolve({ newProduits, deletedOldProduits });
                 }
-            });
-        });
-
-    }
+              }
+            );
+          }
+        }
+      );
+    });
+  }
+  
     static async getproduibyid(id){
       
         return new Promise((resolve) => {
@@ -53,7 +73,7 @@ class Produit{
       }
       
       
-    static async addproduit(nom, description, prix, email, min = prix - 10, max = prix + 10) {
+      static async addproduit(nom, description, prix, email, min = prix - 10, max = prix + 10) {
         try {
           const idpersonne = await new Promise((resolve) => {
             db.query(
@@ -77,10 +97,13 @@ class Produit{
             return false;
           }
       
+          // Get the current date
+          const currentDate = new Date();
+      
           const insertResult = await new Promise((resolve) => {
             db.query(
-              "INSERT INTO produit (nom, description, prix, min, max, idpersonne) VALUES (?, ?, ?, ?, ?, ?)",
-              [nom, description, prix, min, max, idpersonne],
+              "INSERT INTO produit (nom, description, prix, min, max, idpersonne, datecreation) VALUES (?, ?, ?, ?, ?, ?, ?)",
+              [nom, description, prix, min, max, idpersonne, currentDate],
               (error, result) => {
                 if (!error) {
                   resolve(true);
@@ -98,6 +121,7 @@ class Produit{
           return false;
         }
       }
+      
       
       static async deleteproduit(id) {
         try {

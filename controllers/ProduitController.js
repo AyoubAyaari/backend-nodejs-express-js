@@ -2,15 +2,24 @@ const produitModel=require("../models/Produit")
 const fs = require('fs');
 class ProduitController{
 
-    static async getallproduits(req,res)
-    {
-      
-      var result = await produitModel.getproduits();
-
-      if(result)
-      res.send(result)
-    
+  static async getallproduits(req, res) {
+    try {
+      // Retrieve new and delete old products
+      const { newProduits, deletedOldProduits } = await produitModel.getAndDeleteOldProduits();
+  
+      if (newProduits.length > 0) {
+        res.send({ newProduits, deletedOldProduits });
+      } else {
+        res.status(404).send("No new products found");
+      }
+    } catch (error) {
+      console.error("Error in getallproduits route:", error);
+      res.status(500).send("Internal Server Error");
     }
+  }
+  
+  
+  
     static async getaproduit(req, res) {
       try {
         const id = req.params.id; // Assuming you're getting id from the URL parameter
