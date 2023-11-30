@@ -53,7 +53,7 @@ class Produit{
       }
       
       
-    static async addproduit(nom, description, prix, min, max, email) {
+    static async addproduit(nom, description, prix, email, min = prix - 10, max = prix + 10) {
         try {
           const idpersonne = await new Promise((resolve) => {
             db.query(

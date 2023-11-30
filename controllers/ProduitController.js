@@ -43,9 +43,9 @@ class ProduitController{
     }
     static async addnewproduit(req, res) {
         try {
-          const { nom, description, prix, min, max, email } = req.body;
+          const { nom, description, prix, email } = req.body;
       
-          const success = await produitModel.addproduit(nom, description, prix, min, max, email);
+          const success = await produitModel.addproduit(nom, description, prix, email);
       
           if (success) {
             res.send("Add successfully");
