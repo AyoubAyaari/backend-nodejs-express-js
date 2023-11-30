@@ -2,11 +2,13 @@ const enchereModel = require("../models/Enchere");
 const db =require('../config/db');
 
 class EnchereController {
-  static async getallencheres(req, res) {
-    var result = await enchereModel.getenchere();
+  static async getencherebypersonne(req, res) {
+    const email = req.params.email; 
+    var result = await enchereModel.getenchere(email);
 
     if (result) res.send(result);
-  }
+}
+
   static async addnewenchere(req, res) {
     try {
       const { email, idproduit,montant } = req.body;

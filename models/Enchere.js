@@ -4,17 +4,20 @@ class EnchereModel{
 
 
 
-static async getenchere() {
-    return new Promise((resolve) => {
-        db.query("SELECT * FROM enchere", (error, result) => {
-            if (error) {
-                console.error("Error executing SQL query:", error);
-                resolve([]);
-            } else {
-                resolve(result);
-            }
-        });
+static async getenchere(email) {
+  return new Promise((resolve) => {
+    let query = "SELECT * FROM enchere WHERE idpersonne = (SELECT id FROM personne WHERE email = ?)";
+    
+    // Execute the SQL query with the provided email
+    db.query(query, [email], (error, result) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        resolve([]);
+      } else {
+        resolve(result);
+      }
     });
+  });
 }
 static async addenchere(email,idproduit,montant) {
     try {

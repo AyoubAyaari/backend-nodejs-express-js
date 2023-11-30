@@ -17,7 +17,7 @@ router.get("/allproduit",produitcontroller.getallproduits)
 router.get("/prodbyid/:id",produitcontroller.getaproduit)
 router.get("/prodper/:email",produitcontroller.getproduitper)
 router.get("/alltransactions",transactioncontroller.getalltransactions)
-router.get("/allenchere",encherecontroller.getallencheres)
+router.get("/allenchere/:email", encherecontroller.getencherebypersonne);
 router.post("/addpersonne",personnecontroller.addnewpersonne)
 router.post("/addproduit", produitcontroller.addnewproduit)
 router.post("/addtransaction",transactioncontroller.addnewtransaction)
