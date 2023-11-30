@@ -117,10 +117,10 @@ static async addenchere(email, idproduit, montant) {
       // Update user's score based on the bid range
       let updatedScore = 0;
 
-      if (montant >= min && montant <= max) {
-          updatedScore = 5; // Bid within min and max range
-      } else if (montant === prix) {
-          updatedScore = 10; // Bid is equal to prix
+      if (montant === prix) {
+          updatedScore = 10; // Bid within min and max range
+      } else if (montant >= min && montant <= max)  {
+          updatedScore = 5; // Bid is equal to prix
       } else {
           updatedScore = -5; // Bid outside min and max range
       }
