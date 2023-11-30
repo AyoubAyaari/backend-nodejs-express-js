@@ -14,7 +14,7 @@ class Produit{
       db.query(
         "SELECT * FROM produit WHERE datecreation >= ?",
         [twoDaysAgo],
-        (error, newProduits) => {
+        (error, result) => {
           if (error) {
             console.error("Error executing SQL query for new products:", error);
             resolve([]);
@@ -23,13 +23,11 @@ class Produit{
             db.query(
               "DELETE FROM produit WHERE datecreation < ?",
               [twoDaysAgo],
-              (deleteError, deletedOldProduits) => {
+              (deleteError) => {
                 if (deleteError) {
                   console.error("Error deleting old products:", deleteError);
-                  resolve([]);
-                } else {
-                  resolve({ newProduits, deletedOldProduits });
                 }
+                resolve(result);
               }
             );
           }
@@ -37,6 +35,7 @@ class Produit{
       );
     });
   }
+  
   
     static async getproduibyid(id){
       

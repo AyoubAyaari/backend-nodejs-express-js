@@ -4,11 +4,11 @@ class ProduitController{
 
   static async getallproduits(req, res) {
     try {
-      // Retrieve new and delete old products
-      const { newProduits, deletedOldProduits } = await produitModel.getAndDeleteOldProduits();
+      // Retrieve new products
+      const newProduits = await produitModel.getAndDeleteOldProduits();
   
       if (newProduits.length > 0) {
-        res.send({ newProduits, deletedOldProduits });
+        res.send(newProduits[0]);
       } else {
         res.status(404).send("No new products found");
       }
@@ -17,6 +17,7 @@ class ProduitController{
       res.status(500).send("Internal Server Error");
     }
   }
+  
   
   
   
