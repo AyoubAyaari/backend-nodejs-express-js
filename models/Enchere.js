@@ -4,21 +4,53 @@ class EnchereModel{
 
 
 
-static async getenchere(email) {
-  return new Promise((resolve) => {
-    let query = "SELECT * FROM enchere WHERE idpersonne = (SELECT id FROM personne WHERE email = ?)";
-    
-    // Execute the SQL query with the provided email
-    db.query(query, [email], (error, result) => {
-      if (error) {
-        console.error("Error executing SQL query:", error);
-        resolve([]);
-      } else {
-        resolve(result);
-      }
-    });
-  });
+  static async getenchere(email) {
+    try {
+        // Récupérer l'ID de la personne à partir de l'email
+        const idPersonne = await new Promise((resolve) => {
+            db.query(
+                "SELECT id FROM personne WHERE email = ?",
+                [email],
+                (error, result) => {
+                    if (!error) {
+                        const idPersonne = result.length > 0 ? result[0].id : null;
+                        resolve(idPersonne);
+                    } else {
+                        console.error("Erreur lors de la récupération de l'ID de la personne :", error);
+                        resolve(null);
+                    }
+                }
+            );
+        });
+
+        if (!idPersonne) {
+            console.error("Impossible de récupérer l'ID de la personne pour l'email :", email);
+            return [];
+        }
+
+        // Récupérer les produits pour lesquels la personne a participé à une enchère
+        const enchereProduits = await new Promise((resolve) => {
+            db.query(
+                "SELECT produit.* FROM produit JOIN enchere ON produit.id = enchere.idproduit WHERE enchere.idpersonne = ?",
+                [idPersonne],
+                (error, result) => {
+                    if (!error) {
+                        resolve(result);
+                    } else {
+                        console.error("Erreur lors de la récupération des produits de l'enchère :", error);
+                        resolve([]);
+                    }
+                }
+            );
+        });
+
+        return enchereProduits;
+    } catch (error) {
+        console.error("Erreur dans getenchere :", error);
+        return [];
+    }
 }
+
 static async addenchere(email,idproduit,montant) {
     try {
       const idpersonne = await new Promise((resolve) => {
