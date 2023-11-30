@@ -9,21 +9,22 @@ class EnchereController {
     if (result) res.send(result);
 }
 
-  static async addnewenchere(req, res) {
-    try {
-      const { email, idproduit,montant } = req.body;
-      
-      const success = await enchereModel.addenchere(email, idproduit,montant);
-  
+static async addnewenchere(req, res) {
+  try {
+      const { email, idproduit, montant } = req.body;
+
+      // Call the addenchere method from the enchereModel
+      const success = await enchereModel.addenchere(email, idproduit, montant);
+
       if (success) {
-        res.send("Add successfully");
+          res.send("Bid added successfully");
       } else {
-        res.send("Add failed");
+          res.send("Failed to add bid");
       }
-    } catch (error) {
+  } catch (error) {
       console.error("Error in addnewenchere route:", error);
       res.status(500).send("Internal Server Error");
-    }
+  }
 }
 
   static async deleteencheres(req, res) {
