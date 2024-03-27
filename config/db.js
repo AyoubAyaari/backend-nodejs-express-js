@@ -17,4 +17,5 @@ db.getConnection((error, connection) => {
           // Release the connection when done with it
     }
 });
+
 module.exports=db;

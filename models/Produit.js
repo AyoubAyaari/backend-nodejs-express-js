@@ -7,7 +7,7 @@ class Produit{
 
   static async getAndDeleteOldProduits() {
     return new Promise((resolve) => {
-      // Get the date two days ago
+   
       const twoDaysAgo = new Date();
       twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
   
@@ -19,7 +19,7 @@ class Produit{
             console.error("Error executing SQL query for new products:", error);
             resolve([]);
           } else {
-            // Delete old products
+        
             db.query(
               "DELETE FROM produit WHERE datecreation < ?",
               [twoDaysAgo],
@@ -42,7 +42,7 @@ class Produit{
         return new Promise((resolve) => {
           let query = "SELECT * FROM produit where id =?";
           
-          // If an id is provided, add a WHERE clause to filter by id
+          
          
       
           db.query(query, [id], (error, result) => {
@@ -59,7 +59,7 @@ class Produit{
         return new Promise((resolve) => {
           let query = "SELECT * FROM produit WHERE idpersonne = (SELECT id FROM personne WHERE email = ?)";
           
-          // Execute the SQL query with the provided email
+          
           db.query(query, [email], (error, result) => {
             if (error) {
               console.error("Error executing SQL query:", error);
@@ -80,7 +80,7 @@ class Produit{
               [email],
               (error, result) => {
                 if (!error) {
-                  // Assuming that the email is unique, so the result should contain only one record
+            
                   const idpersonne = result.length > 0 ? result[0].id : null;
                   resolve(idpersonne);
                 } else {
@@ -96,7 +96,7 @@ class Produit{
             return false;
           }
       
-          // Get the current date
+    
           const currentDate = new Date();
       
           const insertResult = await new Promise((resolve) => {
@@ -124,10 +124,10 @@ class Produit{
       
       static async deleteproduit(id) {
         try {
-            // Check if the record with the specified id exists
+           
             const checkResult = await db.query("SELECT id FROM produit WHERE id = ?", [id]);
             
-            // If the record doesn't exist, return false
+            
             if (checkResult.length === 0) {
                 console.log(`Record with id ${id} does not exist.`);
                 return false;

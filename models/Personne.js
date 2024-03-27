@@ -27,7 +27,7 @@ class PersonneModel{
             return new Promise((resolve) => {
                 db.query(
                     "INSERT INTO personne (nom, prenom, email, cin, datecreation, montant, score) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    [nom, prenom, email, cin, formattedDate,0, 50],
+                    [nom, prenom, email, cin, formattedDate,1000, 50],
                     (error, result) => {
                         if (!error) {
                             resolve(true);
@@ -45,10 +45,10 @@ class PersonneModel{
     }
     static async deletepersonne(id) {
         try {
-            // Delete related transactions where the person is the sender or receiver
+            
             await db.query("DELETE FROM transaction WHERE id_sender = ? OR id_receiver = ?", [id, id]);
     
-            // Now, delete the record in personne table
+           
             await db.query("DELETE FROM personne WHERE id = ?", [id]);
     
             return true;

@@ -13,7 +13,7 @@ static async addnewenchere(req, res) {
   try {
       const { email, idproduit, montant } = req.body;
 
-      // Call the addenchere method from the enchereModel
+     
       const success = await enchereModel.addenchere(email, idproduit, montant);
 
       if (success) {

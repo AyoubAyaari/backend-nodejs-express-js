@@ -67,21 +67,19 @@ else
     try {
         const { email } = req.body;
 
-        // Validate the request body
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        // Retrieve the user from the database based on the provided email
+     
         const user = await personneModel.getPersonByEmail(email);
 
-        // Check if the user exists
+      
         if (user.length === 0) {
             return res.status(401).json({ message: 'Invalid email .' });
         }
 
-        // Generate a token with a 24-hour expiration
         const token = jwt.sign({ email }, 'your_secret_key', { expiresIn: '24h' });
 
         res.json({ success: true, token,email });

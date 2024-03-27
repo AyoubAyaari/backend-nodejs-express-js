@@ -8,7 +8,7 @@ class ProduitController{
       const newProduits = await produitModel.getAndDeleteOldProduits();
   
       if (newProduits.length > 0) {
-        res.send(newProduits[0]);
+        res.send(newProduits);
       } else {
         res.status(404).send("No new products found");
       }
@@ -23,7 +23,7 @@ class ProduitController{
   
     static async getaproduit(req, res) {
       try {
-        const id = req.params.id; // Assuming you're getting id from the URL parameter
+        const id = req.params.id; 
         const result = await produitModel.getproduibyid(id);
     
         if (result.length > 0) {
@@ -38,7 +38,7 @@ class ProduitController{
     }
     static async getproduitper(req, res) {
       try {
-        const email = req.params.email; // Assuming you're getting email from the URL parameter
+        const email = req.params.email; 
         const result = await produitModel.getproduibyemail(email);
         
         if (result.length > 0) {

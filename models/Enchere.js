@@ -6,7 +6,7 @@ class EnchereModel{
 
   static async getenchere(email) {
     try {
-        // Récupérer l'ID de la personne à partir de l'email
+     
         const idPersonne = await new Promise((resolve) => {
             db.query(
                 "SELECT id FROM personne WHERE email = ?",
@@ -28,10 +28,10 @@ class EnchereModel{
             return [];
         }
 
-        // Récupérer les produits pour lesquels la personne a participé à une enchère
+        
         const enchereProduits = await new Promise((resolve) => {
             db.query(
-                "SELECT produit.* FROM produit JOIN enchere ON produit.id = enchere.idproduit WHERE enchere.idpersonne = ?",
+                "SELECT produit.* ,montant FROM produit JOIN enchere ON produit.id = enchere.idproduit WHERE enchere.idpersonne = ?",
                 [idPersonne],
                 (error, result) => {
                     if (!error) {
@@ -52,7 +52,7 @@ class EnchereModel{
 }
 static async addenchere(email, idproduit, montant) {
   try {
-    // Retrieve user ID from email
+    
     const idpersonne = await new Promise((resolve) => {
       db.query(
         "SELECT id FROM personne WHERE email = ?",
@@ -74,7 +74,7 @@ static async addenchere(email, idproduit, montant) {
       return false;
     }
 
-    // Retrieve product min, max, and prix values
+
     const productInfo = await new Promise((resolve) => {
       db.query(
         "SELECT min, max, prix FROM produit WHERE id = ?",
@@ -97,10 +97,10 @@ static async addenchere(email, idproduit, montant) {
 
     const { min, max, prix } = productInfo;
 
-    // Get the current date
+   
     const currentDate = new Date();
 
-    // Check if the record already exists in the enchere table
+   
     const recordExists = await new Promise((resolve) => {
       db.query(
         "SELECT idpersonne, idproduit FROM enchere WHERE idpersonne = ? AND idproduit = ?",
@@ -117,19 +117,18 @@ static async addenchere(email, idproduit, montant) {
       );
     });
 
-    // Update user's score based on the bid range
+    
     let updatedScore = 0;
 
     if (montant === prix) {
-      updatedScore = 10; // Bid is equal to prix
+      updatedScore = 10; 
     } else if (montant >= min && montant <= max) {
-      updatedScore = 5; // Bid within min and max range
+      updatedScore = 5; 
     } else {
-      updatedScore = -5; // Bid outside min and max range
+      updatedScore = -5; 
     }
-
     if (recordExists) {
-      // Update the existing row in the enchere table
+ 
       await new Promise((resolve) => {
         db.query(
           "UPDATE enchere SET montant = ? WHERE idpersonne = ? AND idproduit = ?",
@@ -145,7 +144,7 @@ static async addenchere(email, idproduit, montant) {
         );
       });
     } else {
-      // Insert a new row into the enchere table
+      
       await new Promise((resolve) => {
         db.query(
           "INSERT INTO enchere (idpersonne, idproduit, montant, datecreation) VALUES (?, ?, ?, ?)",
